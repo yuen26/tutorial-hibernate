@@ -3,6 +3,7 @@ package org.ashina.tutorial.hibernate.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,11 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,8 +30,14 @@ public class Post {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "category")
+    private String category;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostComment> comments = new ArrayList<>();
+    private Set<PostComment> comments = new HashSet<>();
+
+    @OneToOne(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private PostDetail detail;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -44,8 +50,9 @@ public class Post {
     public Post() {
     }
 
-    public Post(String title) {
+    public Post(String title, String category) {
         this.title = title;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -64,12 +71,36 @@ public class Post {
         this.title = title;
     }
 
-    public List<PostComment> getComments() {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Set<PostComment> getComments() {
         return comments;
     }
 
-    public void setComments(List<PostComment> comments) {
+    public void setComments(Set<PostComment> comments) {
         this.comments = comments;
+    }
+
+    public PostDetail getDetail() {
+        return detail;
+    }
+
+    public void setDetail(PostDetail detail) {
+        this.detail = detail;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     public void addComment(PostComment comment) {
@@ -104,4 +135,12 @@ public class Post {
         return 31;
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title.trim() + '\'' +
+                ", category='" + category + '\'' +
+                '}';
+    }
 }

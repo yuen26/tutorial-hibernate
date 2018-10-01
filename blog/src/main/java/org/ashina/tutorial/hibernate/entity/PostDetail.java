@@ -3,12 +3,9 @@ package org.ashina.tutorial.hibernate.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,9 +18,12 @@ public class PostDetail {
     @Id
     private Integer id;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @Column(name = "created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
+    private Date created = new Date();
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
@@ -32,8 +32,12 @@ public class PostDetail {
     public PostDetail() {
     }
 
-    public PostDetail(Date created, Post post) {
-        this.created = created;
+    public PostDetail(String description) {
+        this.description = description;
+    }
+
+    public PostDetail(String description, Post post) {
+        this.description = description;
         this.post = post;
     }
 
@@ -43,6 +47,14 @@ public class PostDetail {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreated() {

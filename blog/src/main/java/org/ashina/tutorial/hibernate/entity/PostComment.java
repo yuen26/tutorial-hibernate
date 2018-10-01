@@ -31,6 +31,10 @@ public class PostComment {
     public PostComment() {
     }
 
+    public PostComment(String review) {
+        this.review = review;
+    }
+
     public PostComment(String review, Post post) {
         this.review = review;
         this.post = post;

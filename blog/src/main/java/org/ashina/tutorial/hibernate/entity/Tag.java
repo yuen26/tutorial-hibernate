@@ -2,6 +2,7 @@ package org.ashina.tutorial.hibernate.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +29,10 @@ public class Tag {
     private Set<Post> posts = new HashSet<>();
 
     public Tag() {
+    }
+
+    public Tag(String name) {
+        this.name = name;
     }
 
     public Tag(String name, Set<Post> posts) {
